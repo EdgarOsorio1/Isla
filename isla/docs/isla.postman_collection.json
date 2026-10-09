@@ -1,0 +1,1015 @@
+{
+  "info": {
+    "name": "isla api",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "auth": {
+    "type": "bearer",
+    "bearer": [
+      {
+        "key": "token",
+        "value": "{{token}}",
+        "type": "string"
+      }
+    ]
+  },
+  "variable": [
+    {
+      "key": "base",
+      "value": "http://localhost:3000/api"
+    },
+    {
+      "key": "token",
+      "value": ""
+    }
+  ],
+  "item": [
+    {
+      "name": "salud",
+      "item": [
+        {
+          "name": "estado del servicio",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base}}/salud",
+              "host": [
+                "{{base}}"
+              ],
+              "path": [
+                "salud"
+              ]
+            },
+            "auth": {
+              "type": "noauth"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "auth",
+      "item": [
+        {
+          "name": "registro",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{base}}/auth/registro",
+              "host": [
+                "{{base}}"
+              ],
+              "path": [
+                "auth",
+                "registro"
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"nombre\": \"ana torres\",\n  \"email\": \"ana@isla.org\",\n  \"clave\": \"Isla2026!\",\n  \"telefono\": \"55501111\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "auth": {
+              "type": "noauth"
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "const r = pm.response.json();",
+                  "if (r.token) { pm.collectionVariables.set('token', r.token); }"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "login administrador",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{base}}/auth/login",
+              "host": [
+                "{{base}}"
+              ],
+              "path": [
+                "auth",
+                "login"
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"admin@isla.org\",\n  \"clave\": \"Isla2026!\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "auth": {
+              "type": "noauth"
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "const r = pm.response.json();",
+                  "if (r.token) { pm.collectionVariables.set('token', r.token); }"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "login trabajador social",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{base}}/auth/login",
+              "host": [
+                "{{base}}"
+              ],
+              "path": [
+                "auth",
+                "login"
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"trabajador@isla.org\",\n  \"clave\": \"Isla2026!\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "auth": {
+              "type": "noauth"
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "const r = pm.response.json();",
+                  "if (r.token) { pm.collectionVariables.set('token', r.token); }"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "login ciudadano",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{base}}/auth/login",
+              "host": [
+                "{{base}}"
+              ],
+              "path": [
+                "auth",
+                "login"
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"ciudadano@isla.org\",\n  \"clave\": \"Isla2026!\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "auth": {
+              "type": "noauth"
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "const r = pm.response.json();",
+                  "if (r.token) { pm.collectionVariables.set('token', r.token); }"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "sesión actual",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base}}/auth/me",
+              "host": [
+                "{{base}}"
+              ],
+              "path": [
+                "auth",
+                "me"
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "usuarios",
+      "item": [
+        {
+          "name": "ver perfil",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base}}/usuarios/perfil",
+              "host": [
+                "{{base}}"
+              ],
+              "path": [
+                "usuarios",
+                "perfil"
+              ]
+            }
+          }
+        },
+        {
+          "name": "actualizar perfil",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{base}}/usuarios/perfil",
+              "host": [
+                "{{base}}"
+              ],
+              "path": [
+                "usuarios",
+                "perfil"
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"nombre\": \"carlos pérez\",\n  \"telefono\": \"44405678\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          }
+        },
+        {
+          "name": "listar usuarios (admin)",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base}}/usuarios?pagina=1&limite=8&q=&estado=",
+              "host": [
+                "{{base}}"
+              ],
+              "path": [
+                "usuarios"
+              ],
+              "query": [
+                {
+                  "key": "pagina",
+                  "value": "1"
+                },
+                {
+                  "key": "limite",
+                  "value": "8"
+                },
+                {
+                  "key": "q",
+                  "value": ""
+                },
+                {
+                  "key": "estado",
+                  "value": ""
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "cambiar rol o estado (admin)",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{base}}/usuarios/4",
+              "host": [
+                "{{base}}"
+              ],
+              "path": [
+                "usuarios",
+                "4"
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"rol\": \"trabajador_social\",\n  \"activo\": true\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "hogares",
+      "item": [
+        {
+          "name": "listar",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base}}/hogares?pagina=1&limite=8&q=&estado=",
+              "host": [
+                "{{base}}"
+              ],
+              "path": [
+                "hogares"
+              ],
+              "query": [
+                {
+                  "key": "pagina",
+                  "value": "1"
+                },
+                {
+                  "key": "limite",
+                  "value": "8"
+                },
+                {
+                  "key": "q",
+                  "value": ""
+                },
+                {
+                  "key": "estado",
+                  "value": ""
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "disponibles",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base}}/hogares/disponibles",
+              "host": [
+                "{{base}}"
+              ],
+              "path": [
+                "hogares",
+                "disponibles"
+              ]
+            }
+          }
+        },
+        {
+          "name": "obtener por id",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base}}/hogares/1",
+              "host": [
+                "{{base}}"
+              ],
+              "path": [
+                "hogares",
+                "1"
+              ]
+            }
+          }
+        },
+        {
+          "name": "crear",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{base}}/hogares",
+              "host": [
+                "{{base}}"
+              ],
+              "path": [
+                "hogares"
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"nombre\": \"hogar nuevo amanecer\",\n  \"tipo\": \"hogar_temporal\",\n  \"direccion\": \"2a calle 5-10\",\n  \"municipio\": \"escuintla\",\n  \"telefono\": \"78006666\",\n  \"capacidad\": 8\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          }
+        },
+        {
+          "name": "actualizar",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{base}}/hogares/1",
+              "host": [
+                "{{base}}"
+              ],
+              "path": [
+                "hogares",
+                "1"
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"nombre\": \"hogar esperanza\",\n  \"tipo\": \"hogar_temporal\",\n  \"direccion\": \"5a avenida 10-20 zona 1\",\n  \"municipio\": \"guatemala\",\n  \"telefono\": \"22001111\",\n  \"capacidad\": 14,\n  \"activo\": true\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          }
+        },
+        {
+          "name": "eliminar (admin)",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{base}}/hogares/4",
+              "host": [
+                "{{base}}"
+              ],
+              "path": [
+                "hogares",
+                "4"
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "ninos",
+      "item": [
+        {
+          "name": "listar",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base}}/ninos?pagina=1&limite=8&q=&estado=",
+              "host": [
+                "{{base}}"
+              ],
+              "path": [
+                "ninos"
+              ],
+              "query": [
+                {
+                  "key": "pagina",
+                  "value": "1"
+                },
+                {
+                  "key": "limite",
+                  "value": "8"
+                },
+                {
+                  "key": "q",
+                  "value": ""
+                },
+                {
+                  "key": "estado",
+                  "value": ""
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "disponibles para asignar",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base}}/ninos/disponibles",
+              "host": [
+                "{{base}}"
+              ],
+              "path": [
+                "ninos",
+                "disponibles"
+              ]
+            }
+          }
+        },
+        {
+          "name": "obtener por id",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base}}/ninos/1",
+              "host": [
+                "{{base}}"
+              ],
+              "path": [
+                "ninos",
+                "1"
+              ]
+            }
+          }
+        },
+        {
+          "name": "crear desde una alerta",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{base}}/ninos",
+              "host": [
+                "{{base}}"
+              ],
+              "path": [
+                "ninos"
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"nombres\": \"camila\",\n  \"apellidos\": \"ruiz\",\n  \"fecha_nacimiento\": \"2018-07-21\",\n  \"sexo\": \"f\",\n  \"observaciones\": \"llegó acompañada de un vecino\",\n  \"alerta_id\": 4\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          }
+        },
+        {
+          "name": "actualizar",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{base}}/ninos/4",
+              "host": [
+                "{{base}}"
+              ],
+              "path": [
+                "ninos",
+                "4"
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"nombres\": \"luis\",\n  \"apellidos\": \"herrera\",\n  \"fecha_nacimiento\": \"2010-09-20\",\n  \"sexo\": \"m\",\n  \"estado\": \"en_riesgo\",\n  \"observaciones\": \"referido por una escuela\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          }
+        },
+        {
+          "name": "eliminar (admin)",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{base}}/ninos/4",
+              "host": [
+                "{{base}}"
+              ],
+              "path": [
+                "ninos",
+                "4"
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "alertas",
+      "item": [
+        {
+          "name": "listar",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base}}/alertas?pagina=1&limite=8&q=&estado=",
+              "host": [
+                "{{base}}"
+              ],
+              "path": [
+                "alertas"
+              ],
+              "query": [
+                {
+                  "key": "pagina",
+                  "value": "1"
+                },
+                {
+                  "key": "limite",
+                  "value": "8"
+                },
+                {
+                  "key": "q",
+                  "value": ""
+                },
+                {
+                  "key": "estado",
+                  "value": ""
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "obtener por id",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base}}/alertas/1",
+              "host": [
+                "{{base}}"
+              ],
+              "path": [
+                "alertas",
+                "1"
+              ]
+            }
+          }
+        },
+        {
+          "name": "crear",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{base}}/alertas",
+              "host": [
+                "{{base}}"
+              ],
+              "path": [
+                "alertas"
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"titulo\": \"niño solo en la parada\",\n  \"descripcion\": \"un niño de unos cinco años espera solo desde hace horas.\",\n  \"ubicacion\": \"parada zona 6\",\n  \"edad_aprox\": 5,\n  \"prioridad\": \"alta\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          }
+        },
+        {
+          "name": "actualizar (personal)",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{base}}/alertas/4",
+              "host": [
+                "{{base}}"
+              ],
+              "path": [
+                "alertas",
+                "4"
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"titulo\": \"niña pidiendo comida en la calle\",\n  \"descripcion\": \"se ve a una niña todas las tardes pidiendo comida.\",\n  \"ubicacion\": \"avenida las américas\",\n  \"edad_aprox\": 9,\n  \"prioridad\": \"alta\",\n  \"estado\": \"en_revision\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          }
+        },
+        {
+          "name": "eliminar (admin)",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{base}}/alertas/6",
+              "host": [
+                "{{base}}"
+              ],
+              "path": [
+                "alertas",
+                "6"
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "asignaciones",
+      "item": [
+        {
+          "name": "listar",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base}}/asignaciones?pagina=1&limite=8&q=&estado=",
+              "host": [
+                "{{base}}"
+              ],
+              "path": [
+                "asignaciones"
+              ],
+              "query": [
+                {
+                  "key": "pagina",
+                  "value": "1"
+                },
+                {
+                  "key": "limite",
+                  "value": "8"
+                },
+                {
+                  "key": "q",
+                  "value": ""
+                },
+                {
+                  "key": "estado",
+                  "value": ""
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "obtener por id",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base}}/asignaciones/1",
+              "host": [
+                "{{base}}"
+              ],
+              "path": [
+                "asignaciones",
+                "1"
+              ]
+            }
+          }
+        },
+        {
+          "name": "solicitar asignación",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{base}}/asignaciones",
+              "host": [
+                "{{base}}"
+              ],
+              "path": [
+                "asignaciones"
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"nino_id\": 4,\n  \"hogar_id\": 4,\n  \"motivo\": \"el hogar cuenta con cupo y está cerca de su escuela\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          }
+        },
+        {
+          "name": "aprobar (admin)",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{base}}/asignaciones/3/resolver",
+              "host": [
+                "{{base}}"
+              ],
+              "path": [
+                "asignaciones",
+                "3",
+                "resolver"
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"accion\": \"aprobar\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          }
+        },
+        {
+          "name": "rechazar (admin)",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{base}}/asignaciones/3/resolver",
+              "host": [
+                "{{base}}"
+              ],
+              "path": [
+                "asignaciones",
+                "3",
+                "resolver"
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"accion\": \"rechazar\",\n  \"respuesta\": \"falta completar documentos del caso\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          }
+        },
+        {
+          "name": "confirmar traslado",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{base}}/asignaciones/2/completar",
+              "host": [
+                "{{base}}"
+              ],
+              "path": [
+                "asignaciones",
+                "2",
+                "completar"
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "dashboard",
+      "item": [
+        {
+          "name": "resumen según rol",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base}}/dashboard",
+              "host": [
+                "{{base}}"
+              ],
+              "path": [
+                "dashboard"
+              ]
+            }
+          }
+        }
+      ]
+    }
+  ]
+}
