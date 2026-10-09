@@ -1,1 +1,10 @@
-<p>campo works!</p>
+<div class="campo">
+  <label [for]="para()">{{ etiqueta() }}</label>
+  <ng-content />
+  @if (ayuda()) {
+    <span class="ayuda">{{ ayuda() }}</span>
+  }
+  @if (mostrarError()) {
+    <span class="error" role="alert">{{ mensaje() }}</span>
+  }
+</div>

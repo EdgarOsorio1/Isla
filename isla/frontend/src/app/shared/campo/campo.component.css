@@ -1,0 +1,6 @@
+:host { display: block; }
+.campo { display: grid; gap: 0.3rem; margin-bottom: 1rem; }
+label { font-weight: 600; font-size: 0.9rem; }
+.ayuda { font-size: 0.85rem; color: var(--tinta-suave); }
+.error { font-size: 0.85rem; color: var(--peligro); }
+:host ::ng-deep .ng-invalid.ng-touched { border-color: var(--peligro); }

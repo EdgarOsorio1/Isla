@@ -1,1 +1,35 @@
-<p>perfil works!</p>
+<section class="pagina">
+  <div class="pagina-cabecera">
+    <div>
+      <h1>mi perfil</h1>
+      <p>actualiza tus datos de contacto o cambia tu contraseña.</p>
+    </div>
+  </div>
+
+  <app-lista-estado [cargando]="cargando()" [error]="errorCarga()" />
+
+  @if (!cargando() && !errorCarga()) {
+    <div class="tarjeta" style="max-width: 560px">
+      @if (errorForm()) {
+        <div class="alerta-error" role="alert">{{ errorForm() }}</div>
+      }
+      <form [formGroup]="form" (ngSubmit)="guardar()" novalidate>
+        <div class="campo">
+          <label for="p-email">correo electrónico</label>
+          <input id="p-email" [value]="email()" readonly />
+          <span class="ayuda">rol: {{ rol() }}</span>
+        </div>
+        <app-campo etiqueta="nombre completo" para="p-nombre" [control]="form.controls.nombre">
+          <input id="p-nombre" formControlName="nombre" />
+        </app-campo>
+        <app-campo etiqueta="teléfono (opcional)" para="p-tel" [control]="form.controls.telefono">
+          <input id="p-tel" type="tel" formControlName="telefono" />
+        </app-campo>
+        <app-campo etiqueta="nueva contraseña (opcional)" para="p-clave" [control]="form.controls.clave" ayuda="déjala vacía si no quieres cambiarla">
+          <input id="p-clave" type="password" formControlName="clave" autocomplete="new-password" />
+        </app-campo>
+        <button type="submit" class="btn btn-primario" [disabled]="guardando()">{{ guardando() ? 'guardando...' : 'guardar cambios' }}</button>
+      </form>
+    </div>
+  }
+</section>

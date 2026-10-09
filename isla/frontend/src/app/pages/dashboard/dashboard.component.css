@@ -1,0 +1,9 @@
+:host { display: block; }
+.kpis { display: grid; grid-template-columns: repeat(auto-fit, minmax(190px, 1fr)); gap: 1rem; margin-bottom: 1.25rem; }
+.kpi { background: var(--lino); border: 1px solid var(--borde); border-left: 6px solid var(--oro); border-radius: 14px; padding: 1rem 1.25rem; display: grid; gap: .15rem; }
+.numero { font-family: var(--fuente-titulo); font-weight: 700; font-size: 2.2rem; line-height: 1; color: var(--tinta); }
+.dos { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 1rem; }
+.barra { display: grid; grid-template-columns: 110px 1fr 36px; gap: .75rem; align-items: center; margin-bottom: .6rem; }
+.barra strong { text-align: right; }
+.pista { height: 14px; background: var(--arena-oscura); border-radius: 8px; overflow: hidden; }
+.relleno { height: 100%; background: var(--mar); border-radius: 8px; min-width: 4px; }

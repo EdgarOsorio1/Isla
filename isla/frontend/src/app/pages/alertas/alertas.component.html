@@ -1,1 +1,119 @@
-<p>alertas works!</p>
+<section class="pagina">
+  <div class="pagina-cabecera">
+    <div>
+      <h1>alertas</h1>
+      <p>{{ esPersonal() ? 'reportes de posibles casos de abandono infantil.' : 'las situaciones que has reportado.' }}</p>
+    </div>
+    <button type="button" class="btn btn-oro" (click)="abrir()">reportar alerta</button>
+  </div>
+
+  <form class="herramientas" role="search" (submit)="$event.preventDefault(); buscar(qi.value, ei.value)">
+    <div class="campo crece">
+      <label for="q">buscar</label>
+      <input #qi id="q" type="search" placeholder="título o ubicación" [value]="q" />
+    </div>
+    <div class="campo">
+      <label for="f">estado</label>
+      <select #ei id="f" (change)="buscar(qi.value, ei.value)">
+        <option value="">todos</option>
+        <option value="pendiente">pendiente</option>
+        <option value="en_revision">en revisión</option>
+        <option value="atendida">atendida</option>
+        <option value="descartada">descartada</option>
+      </select>
+    </div>
+    <button class="btn btn-suave" type="submit">buscar</button>
+  </form>
+
+  <app-lista-estado [cargando]="cargando()" [error]="error()" [vacio]="!cargando() && !error() && datos().length === 0" titulo="no hay alertas para mostrar" detalle="si ves a un niño en riesgo, repórtalo con el botón reportar alerta." />
+
+  @if (!cargando() && datos().length) {
+    <div class="tabla-caja">
+      <table>
+        <thead>
+          <tr><th>alerta</th><th>ubicación</th><th>prioridad</th><th>estado</th><th>fecha</th><th>acciones</th></tr>
+        </thead>
+        <tbody>
+          @for (a of datos(); track a.id) {
+            <tr>
+              <td>{{ a.titulo }}@if (esPersonal()) {<small>reportó {{ a.reportante }}</small>}</td>
+              <td>{{ a.ubicacion }}</td>
+              <td><app-estado [valor]="a.prioridad" /></td>
+              <td><app-estado [valor]="a.estado" /></td>
+              <td>{{ a.creado_en | date: 'dd/MM/yyyy' }}</td>
+              <td>
+                <div class="acciones">
+                  <button type="button" class="btn btn-suave btn-chico" (click)="detalle.set(a)">ver</button>
+                  @if (esPersonal()) {
+                    <button type="button" class="btn btn-suave btn-chico" (click)="abrir(a)">editar</button>
+                    @if (a.estado === 'pendiente' || a.estado === 'en_revision') {
+                      <button type="button" class="btn btn-primario btn-chico" (click)="registrarNino(a)">registrar niño</button>
+                    }
+                    @if (auth.tieneRol('administrador')) {
+                      <button type="button" class="btn btn-peligro btn-chico" (click)="eliminar(a)">eliminar</button>
+                    }
+                  }
+                </div>
+              </td>
+            </tr>
+          }
+        </tbody>
+      </table>
+    </div>
+    <app-paginador [pagina]="pagina()" [paginas]="paginas()" [total]="total()" (cambiar)="irA($event)" />
+  }
+</section>
+
+@if (detalle(); as d) {
+  <app-modal [titulo]="d.titulo" (cerrar)="detalle.set(null)">
+    <p>{{ d.descripcion }}</p>
+    <p class="ayuda">ubicación: {{ d.ubicacion }}. edad aproximada: {{ d.edad_aprox ?? 'sin dato' }}. reportada por {{ d.reportante }}.</p>
+    <p><app-estado [valor]="d.prioridad" /> <app-estado [valor]="d.estado" /></p>
+    <footer><button type="button" class="btn btn-suave" (click)="detalle.set(null)">cerrar</button></footer>
+  </app-modal>
+}
+
+@if (modal()) {
+  <app-modal [titulo]="editando() ? 'editar alerta' : 'reportar alerta'" (cerrar)="modal.set(false)">
+    @if (errorForm()) {
+      <div class="alerta-error" role="alert">{{ errorForm() }}</div>
+    }
+    <form [formGroup]="form" (ngSubmit)="guardar()" novalidate>
+      <app-campo etiqueta="título" para="a-titulo" [control]="form.controls.titulo">
+        <input id="a-titulo" formControlName="titulo" placeholder="ejemplo: niño solo en el parque" />
+      </app-campo>
+      <app-campo etiqueta="¿qué está pasando?" para="a-desc" [control]="form.controls.descripcion">
+        <textarea id="a-desc" formControlName="descripcion"></textarea>
+      </app-campo>
+      <app-campo etiqueta="¿dónde ocurre?" para="a-ubic" [control]="form.controls.ubicacion">
+        <input id="a-ubic" formControlName="ubicacion" />
+      </app-campo>
+      <div class="rejilla-form">
+        <app-campo etiqueta="edad aproximada (opcional)" para="a-edad" [control]="form.controls.edad_aprox">
+          <input id="a-edad" type="number" formControlName="edad_aprox" />
+        </app-campo>
+        <app-campo etiqueta="prioridad" para="a-prio" [control]="form.controls.prioridad">
+          <select id="a-prio" formControlName="prioridad">
+            <option value="baja">baja</option>
+            <option value="media">media</option>
+            <option value="alta">alta</option>
+          </select>
+        </app-campo>
+        @if (editando()) {
+          <app-campo etiqueta="estado" para="a-estado" [control]="form.controls.estado">
+            <select id="a-estado" formControlName="estado">
+              <option value="pendiente">pendiente</option>
+              <option value="en_revision">en revisión</option>
+              <option value="atendida">atendida</option>
+              <option value="descartada">descartada</option>
+            </select>
+          </app-campo>
+        }
+      </div>
+      <footer>
+        <button type="button" class="btn btn-suave" (click)="modal.set(false)">cancelar</button>
+        <button type="submit" class="btn btn-primario" [disabled]="guardando()">{{ guardando() ? 'guardando...' : 'guardar alerta' }}</button>
+      </footer>
+    </form>
+  </app-modal>
+}

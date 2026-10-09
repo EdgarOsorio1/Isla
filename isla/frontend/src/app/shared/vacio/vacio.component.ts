@@ -1,11 +1,14 @@
-import { Component } from '@angular/core';
+import { Component, input } from '@angular/core';
 
 @Component({
-  selector: 'app-vacio',
-  imports: [],
+  selector: 'app-lista-estado',
   templateUrl: './vacio.component.html',
   styleUrl: './vacio.component.css'
 })
-export class VacioComponent {
-
+export class ListaEstadoComponent {
+  cargando = input(false);
+  error = input('');
+  vacio = input(false);
+  titulo = input('');
+  detalle = input('');
 }

@@ -1,1 +1,115 @@
-<p>asignaciones works!</p>
+<section class="pagina">
+  <div class="pagina-cabecera">
+    <div>
+      <h1>asignaciones</h1>
+      <p>solicitudes para ubicar a un niño en un hogar. el administrador las aprueba y el equipo confirma el traslado.</p>
+    </div>
+    <button type="button" class="btn btn-oro" (click)="abrir()">nueva solicitud</button>
+  </div>
+
+  <form class="herramientas" role="search" (submit)="$event.preventDefault(); buscar(qi.value, ei.value)">
+    <div class="campo crece">
+      <label for="q">buscar</label>
+      <input #qi id="q" type="search" placeholder="niño u hogar" [value]="q" />
+    </div>
+    <div class="campo">
+      <label for="f">estado</label>
+      <select #ei id="f" (change)="buscar(qi.value, ei.value)">
+        <option value="">todos</option>
+        <option value="pendiente">pendiente</option>
+        <option value="aprobada">aprobada</option>
+        <option value="rechazada">rechazada</option>
+        <option value="completada">completada</option>
+      </select>
+    </div>
+    <button class="btn btn-suave" type="submit">buscar</button>
+  </form>
+
+  <app-lista-estado [cargando]="cargando()" [error]="error()" [vacio]="!cargando() && !error() && datos().length === 0" titulo="no hay asignaciones para mostrar" detalle="crea una solicitud desde el botón nueva solicitud." />
+
+  @if (!cargando() && datos().length) {
+    <div class="tabla-caja">
+      <table>
+        <thead>
+          <tr><th>niño</th><th>hogar</th><th>solicitó</th><th>estado</th><th>fecha</th><th>acciones</th></tr>
+        </thead>
+        <tbody>
+          @for (a of datos(); track a.id) {
+            <tr>
+              <td>{{ a.nino }}<small>{{ a.motivo }}</small></td>
+              <td>{{ a.hogar }}</td>
+              <td>{{ a.solicitante }}</td>
+              <td>
+                <app-estado [valor]="a.estado" />
+                @if (a.respuesta) {
+                  <small>{{ a.respuesta }}</small>
+                }
+              </td>
+              <td>{{ a.creado_en | date: 'dd/MM/yyyy' }}</td>
+              <td>
+                <div class="acciones">
+                  @if (a.estado === 'pendiente' && auth.tieneRol('administrador')) {
+                    <button type="button" class="btn btn-primario btn-chico" (click)="aprobar(a)">aprobar</button>
+                    <button type="button" class="btn btn-peligro btn-chico" (click)="abrirRechazo(a)">rechazar</button>
+                  }
+                  @if (a.estado === 'aprobada') {
+                    <button type="button" class="btn btn-oro btn-chico" (click)="completar(a)">confirmar traslado</button>
+                  }
+                </div>
+              </td>
+            </tr>
+          }
+        </tbody>
+      </table>
+    </div>
+    <app-paginador [pagina]="pagina()" [paginas]="paginas()" [total]="total()" (cambiar)="irA($event)" />
+  }
+</section>
+
+@if (modal()) {
+  <app-modal titulo="nueva solicitud de asignación" (cerrar)="modal.set(false)">
+    @if (errorForm()) {
+      <div class="alerta-error" role="alert">{{ errorForm() }}</div>
+    }
+    <form [formGroup]="form" (ngSubmit)="guardar()" novalidate>
+      <app-campo etiqueta="niño" para="s-nino" [control]="form.controls.nino_id" [ayuda]="ninos().length ? '' : 'no hay niños en riesgo sin asignación en curso'">
+        <select id="s-nino" formControlName="nino_id">
+          <option [ngValue]="null">selecciona un niño</option>
+          @for (n of ninos(); track n.id) {
+            <option [ngValue]="n.id">{{ n.nombre }}</option>
+          }
+        </select>
+      </app-campo>
+      <app-campo etiqueta="hogar" para="s-hogar" [control]="form.controls.hogar_id" [ayuda]="hogares().length ? '' : 'no hay hogares con cupo disponible'">
+        <select id="s-hogar" formControlName="hogar_id">
+          <option [ngValue]="null">selecciona un hogar</option>
+          @for (h of hogares(); track h.id) {
+            <option [ngValue]="h.id">{{ h.nombre }}</option>
+          }
+        </select>
+      </app-campo>
+      <app-campo etiqueta="motivo de la asignación" para="s-motivo" [control]="form.controls.motivo">
+        <textarea id="s-motivo" formControlName="motivo"></textarea>
+      </app-campo>
+      <footer>
+        <button type="button" class="btn btn-suave" (click)="modal.set(false)">cancelar</button>
+        <button type="submit" class="btn btn-primario" [disabled]="guardando()">{{ guardando() ? 'enviando...' : 'enviar solicitud' }}</button>
+      </footer>
+    </form>
+  </app-modal>
+}
+
+@if (rechazando(); as r) {
+  <app-modal titulo="rechazar solicitud" (cerrar)="rechazando.set(null)">
+    <p>indica por qué se rechaza la solicitud de {{ r.nino }} en {{ r.hogar }}.</p>
+    <form (submit)="$event.preventDefault(); rechazar()" novalidate>
+      <app-campo etiqueta="motivo del rechazo" para="r-motivo" [control]="motivoRechazo">
+        <textarea id="r-motivo" [formControl]="motivoRechazo"></textarea>
+      </app-campo>
+      <footer>
+        <button type="button" class="btn btn-suave" (click)="rechazando.set(null)">cancelar</button>
+        <button type="submit" class="btn btn-peligro">rechazar solicitud</button>
+      </footer>
+    </form>
+  </app-modal>
+}

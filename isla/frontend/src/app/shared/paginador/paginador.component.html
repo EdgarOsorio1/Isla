@@ -1,1 +1,8 @@
-<p>paginador works!</p>
+<nav class="paginador" aria-label="paginación">
+  <span class="total">{{ total() }} registros</span>
+  <div class="controles">
+    <button type="button" [disabled]="pagina() <= 1" (click)="cambiar.emit(pagina() - 1)">anterior</button>
+    <span class="actual">página {{ pagina() }} de {{ paginas() }}</span>
+    <button type="button" [disabled]="pagina() >= paginas()" (click)="cambiar.emit(pagina() + 1)">siguiente</button>
+  </div>
+</nav>

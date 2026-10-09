@@ -1,0 +1,3 @@
+:host { display: block; }
+.tarjeta { max-width: 560px; }
+input[readonly] { background: var(--arena); cursor: not-allowed; }

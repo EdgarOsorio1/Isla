@@ -1,1 +1,9 @@
-<p>modal works!</p>
+<div class="fondo" (click)="cerrar.emit()">
+  <div class="ventana" role="dialog" aria-modal="true" [attr.aria-label]="titulo()" (click)="$event.stopPropagation()">
+    <header>
+      <h2>{{ titulo() }}</h2>
+      <button type="button" class="cerrar" aria-label="cerrar" (click)="cerrar.emit()">×</button>
+    </header>
+    <ng-content />
+  </div>
+</div>

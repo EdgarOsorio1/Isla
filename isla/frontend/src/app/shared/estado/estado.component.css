@@ -1,0 +1,9 @@
+:host { display: inline-block; }
+.insignia { display: inline-block; padding: 0.15rem 0.65rem; border-radius: 999px; font-size: 0.78rem; font-weight: 700; white-space: nowrap; background: var(--arena-oscura); color: var(--tinta); }
+.insignia[data-valor='alta'], .insignia[data-valor='rechazada'], .insignia[data-valor='en_riesgo'],
+.insignia[data-valor='lleno'], .insignia[data-valor='inactivo'] { background: #fdecea; color: #8a1c14; }
+.insignia[data-valor='media'], .insignia[data-valor='pendiente'], .insignia[data-valor='en_proceso'] { background: #fff3d6; color: #7a5600; }
+.insignia[data-valor='en_revision'] { background: #dff1f4; color: var(--mar-oscuro); }
+.insignia[data-valor='baja'], .insignia[data-valor='atendida'], .insignia[data-valor='acogido'], .insignia[data-valor='aprobada'],
+.insignia[data-valor='completada'], .insignia[data-valor='disponible'], .insignia[data-valor='reintegrado'] { background: #e1f3e8; color: #1d5a37; }
+.insignia[data-valor='descartada'] { background: #ececec; color: #555; }

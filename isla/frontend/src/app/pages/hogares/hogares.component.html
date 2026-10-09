@@ -1,1 +1,104 @@
-<p>hogares works!</p>
+<section class="pagina">
+  <div class="pagina-cabecera">
+    <div>
+      <h1>hogares</h1>
+      <p>lugares seguros que pueden recibir a los niños.</p>
+    </div>
+    <button type="button" class="btn btn-oro" (click)="abrir()">nuevo hogar</button>
+  </div>
+
+  <form class="herramientas" role="search" (submit)="$event.preventDefault(); buscar(qi.value, ei.value)">
+    <div class="campo crece">
+      <label for="q">buscar</label>
+      <input #qi id="q" type="search" placeholder="nombre o municipio" [value]="q" />
+    </div>
+    <div class="campo">
+      <label for="f">disponibilidad</label>
+      <select #ei id="f" (change)="buscar(qi.value, ei.value)">
+        <option value="">todos</option>
+        <option value="disponible">con cupo</option>
+        <option value="lleno">sin cupo</option>
+        <option value="inactivo">inactivos</option>
+      </select>
+    </div>
+    <button class="btn btn-suave" type="submit">buscar</button>
+  </form>
+
+  <app-lista-estado [cargando]="cargando()" [error]="error()" [vacio]="!cargando() && !error() && datos().length === 0" titulo="no hay hogares para mostrar" detalle="registra un hogar o cambia los filtros de búsqueda." />
+
+  @if (!cargando() && datos().length) {
+    <div class="tabla-caja">
+      <table>
+        <thead>
+          <tr><th>hogar</th><th>tipo</th><th>municipio</th><th>cupos</th><th>estado</th><th>acciones</th></tr>
+        </thead>
+        <tbody>
+          @for (h of datos(); track h.id) {
+            <tr>
+              <td>{{ h.nombre }}<small>{{ h.direccion || 'sin dirección' }}</small></td>
+              <td>{{ tipo(h.tipo) }}</td>
+              <td>{{ h.municipio }}</td>
+              <td>{{ h.ocupados }} de {{ h.capacidad }}</td>
+              <td><app-estado [valor]="estadoDe(h)" /></td>
+              <td>
+                <div class="acciones">
+                  <button type="button" class="btn btn-suave btn-chico" (click)="abrir(h)">editar</button>
+                  @if (auth.tieneRol('administrador')) {
+                    <button type="button" class="btn btn-peligro btn-chico" (click)="eliminar(h)">eliminar</button>
+                  }
+                </div>
+              </td>
+            </tr>
+          }
+        </tbody>
+      </table>
+    </div>
+    <app-paginador [pagina]="pagina()" [paginas]="paginas()" [total]="total()" (cambiar)="irA($event)" />
+  }
+</section>
+
+@if (modal()) {
+  <app-modal [titulo]="editando() ? 'editar hogar' : 'nuevo hogar'" (cerrar)="modal.set(false)">
+    @if (errorForm()) {
+      <div class="alerta-error" role="alert">{{ errorForm() }}</div>
+    }
+    <form [formGroup]="form" (ngSubmit)="guardar()" novalidate>
+      <div class="rejilla-form">
+        <div class="ancho">
+          <app-campo etiqueta="nombre del hogar" para="h-nombre" [control]="form.controls.nombre">
+            <input id="h-nombre" formControlName="nombre" />
+          </app-campo>
+        </div>
+        <app-campo etiqueta="tipo" para="h-tipo" [control]="form.controls.tipo">
+          <select id="h-tipo" formControlName="tipo">
+            <option value="hogar_temporal">hogar temporal</option>
+            <option value="familia_acogida">familia de acogida</option>
+            <option value="centro_proteccion">centro de protección</option>
+          </select>
+        </app-campo>
+        <app-campo etiqueta="municipio" para="h-municipio" [control]="form.controls.municipio">
+          <input id="h-municipio" formControlName="municipio" />
+        </app-campo>
+        <div class="ancho">
+          <app-campo etiqueta="dirección (opcional)" para="h-direccion" [control]="form.controls.direccion">
+            <input id="h-direccion" formControlName="direccion" />
+          </app-campo>
+        </div>
+        <app-campo etiqueta="teléfono (opcional)" para="h-telefono" [control]="form.controls.telefono">
+          <input id="h-telefono" type="tel" formControlName="telefono" />
+        </app-campo>
+        <app-campo etiqueta="capacidad total" para="h-capacidad" [control]="form.controls.capacidad">
+          <input id="h-capacidad" type="number" formControlName="capacidad" />
+        </app-campo>
+      </div>
+      <div class="fila-check">
+        <input id="h-activo" type="checkbox" formControlName="activo" />
+        <label for="h-activo">el hogar está activo y puede recibir niños</label>
+      </div>
+      <footer>
+        <button type="button" class="btn btn-suave" (click)="modal.set(false)">cancelar</button>
+        <button type="submit" class="btn btn-primario" [disabled]="guardando()">{{ guardando() ? 'guardando...' : 'guardar hogar' }}</button>
+      </footer>
+    </form>
+  </app-modal>
+}

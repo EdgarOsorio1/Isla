@@ -1,1 +1,43 @@
-<p>shell works!</p>
+<header class="barra">
+  <a class="marca" routerLink="/panel">isla</a>
+  <nav aria-label="principal">
+    <a routerLink="/panel" routerLinkActive="activo">panel</a>
+    <a routerLink="/alertas" routerLinkActive="activo">alertas</a>
+    @if (auth.tieneRol('administrador', 'trabajador_social')) {
+      <a routerLink="/hogares" routerLinkActive="activo">hogares</a>
+      <a routerLink="/ninos" routerLinkActive="activo">niños</a>
+      <a routerLink="/asignaciones" routerLinkActive="activo">asignaciones</a>
+    }
+    @if (auth.tieneRol('administrador')) {
+      <a routerLink="/usuarios" routerLinkActive="activo">usuarios</a>
+    }
+    <a routerLink="/perfil" routerLinkActive="activo">mi perfil</a>
+  </nav>
+  <div class="usuario">
+    <span>{{ auth.usuario()?.nombre }}</span>
+    <button type="button" class="btn btn-suave btn-chico" (click)="auth.cerrarSesion()">salir</button>
+  </div>
+</header>
+
+<main>
+  <router-outlet />
+</main>
+
+<div class="avisos" aria-live="polite">
+  @for (a of avisos.avisos(); track a.id) {
+    <div [class]="'aviso ' + a.tipo" role="status" (click)="avisos.quitar(a.id)">{{ a.texto }}</div>
+  }
+</div>
+
+@if (confirmar.pendiente(); as c) {
+  <div class="conf-fondo">
+    <div class="conf-ventana" role="alertdialog" aria-modal="true">
+      <h2>{{ c.titulo }}</h2>
+      <p>{{ c.texto }}</p>
+      <footer>
+        <button type="button" class="btn btn-suave" (click)="confirmar.responder(false)">cancelar</button>
+        <button type="button" class="btn" [class.btn-peligro]="c.peligro" [class.btn-primario]="!c.peligro" (click)="confirmar.responder(true)">{{ c.accion }}</button>
+      </footer>
+    </div>
+  </div>
+}

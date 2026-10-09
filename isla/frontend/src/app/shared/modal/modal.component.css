@@ -1,0 +1,8 @@
+:host { display: block; }
+.fondo { position: fixed; inset: 0; z-index: 50; display: grid; place-items: center; padding: 1rem; background: rgba(29, 43, 54, 0.55); }
+.ventana { width: 100%; max-width: 560px; max-height: 90vh; overflow-y: auto; background: var(--lino); border-radius: 16px; padding: 1.5rem; box-shadow: 0 25px 60px rgba(0, 0, 0, 0.35); animation: entrar 0.15s ease-out; }
+header { display: flex; justify-content: space-between; align-items: center; gap: 1rem; margin-bottom: 1rem; }
+header h2 { margin: 0; font-size: 1.25rem; }
+.cerrar { border: 0; background: transparent; font-size: 1.4rem; line-height: 1; cursor: pointer; color: var(--tinta-suave); }
+:host ::ng-deep footer { display: flex; justify-content: flex-end; gap: 0.6rem; margin-top: 1.25rem; }
+@keyframes entrar { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: none; } }

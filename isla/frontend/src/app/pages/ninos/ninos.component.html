@@ -1,1 +1,113 @@
-<p>ninos works!</p>
+<section class="pagina">
+  <div class="pagina-cabecera">
+    <div>
+      <h1>niños</h1>
+      <p>niños registrados a partir de alertas o referencias.</p>
+    </div>
+    <button type="button" class="btn btn-oro" (click)="abrir()">registrar niño</button>
+  </div>
+
+  <form class="herramientas" role="search" (submit)="$event.preventDefault(); buscar(qi.value, ei.value)">
+    <div class="campo crece">
+      <label for="q">buscar</label>
+      <input #qi id="q" type="search" placeholder="nombre o apellido" [value]="q" />
+    </div>
+    <div class="campo">
+      <label for="f">estado</label>
+      <select #ei id="f" (change)="buscar(qi.value, ei.value)">
+        <option value="">todos</option>
+        <option value="en_riesgo">en riesgo</option>
+        <option value="en_proceso">en proceso</option>
+        <option value="acogido">acogido</option>
+        <option value="reintegrado">reintegrado</option>
+      </select>
+    </div>
+    <button class="btn btn-suave" type="submit">buscar</button>
+  </form>
+
+  <app-lista-estado [cargando]="cargando()" [error]="error()" [vacio]="!cargando() && !error() && datos().length === 0" titulo="no hay niños para mostrar" detalle="registra un niño desde una alerta o con el botón registrar niño." />
+
+  @if (!cargando() && datos().length) {
+    <div class="tabla-caja">
+      <table>
+        <thead>
+          <tr><th>niño</th><th>edad</th><th>sexo</th><th>estado</th><th>alerta de origen</th><th>acciones</th></tr>
+        </thead>
+        <tbody>
+          @for (n of datos(); track n.id) {
+            <tr>
+              <td>{{ n.nombres }} {{ n.apellidos }}</td>
+              <td>{{ edad(n.fecha_nacimiento) }}</td>
+              <td>{{ n.sexo === 'f' ? 'femenino' : 'masculino' }}</td>
+              <td><app-estado [valor]="n.estado" /></td>
+              <td>{{ n.alerta_titulo || 'sin alerta' }}</td>
+              <td>
+                <div class="acciones">
+                  <button type="button" class="btn btn-suave btn-chico" (click)="abrir(n)">editar</button>
+                  @if (n.estado === 'en_riesgo') {
+                    <button type="button" class="btn btn-primario btn-chico" (click)="asignar(n)">asignar hogar</button>
+                  }
+                  @if (auth.tieneRol('administrador')) {
+                    <button type="button" class="btn btn-peligro btn-chico" (click)="eliminar(n)">eliminar</button>
+                  }
+                </div>
+              </td>
+            </tr>
+          }
+        </tbody>
+      </table>
+    </div>
+    <app-paginador [pagina]="pagina()" [paginas]="paginas()" [total]="total()" (cambiar)="irA($event)" />
+  }
+</section>
+
+@if (modal()) {
+  <app-modal [titulo]="editando() ? 'editar niño' : 'registrar niño'" (cerrar)="modal.set(false)">
+    @if (alertaOrigen()) {
+      <p class="ayuda">este registro quedará vinculado a la alerta número {{ alertaOrigen() }} y la marcará como atendida.</p>
+    }
+    @if (errorForm()) {
+      <div class="alerta-error" role="alert">{{ errorForm() }}</div>
+    }
+    <form [formGroup]="form" (ngSubmit)="guardar()" novalidate>
+      <div class="rejilla-form">
+        <app-campo etiqueta="nombres" para="n-nombres" [control]="form.controls.nombres">
+          <input id="n-nombres" formControlName="nombres" />
+        </app-campo>
+        <app-campo etiqueta="apellidos (opcional)" para="n-apellidos" [control]="form.controls.apellidos">
+          <input id="n-apellidos" formControlName="apellidos" />
+        </app-campo>
+        <app-campo etiqueta="fecha de nacimiento (opcional)" para="n-fecha" [control]="form.controls.fecha_nacimiento">
+          <input id="n-fecha" type="date" formControlName="fecha_nacimiento" [max]="hoy" />
+        </app-campo>
+        <app-campo etiqueta="sexo" para="n-sexo" [control]="form.controls.sexo">
+          <select id="n-sexo" formControlName="sexo">
+            <option value="f">femenino</option>
+            <option value="m">masculino</option>
+          </select>
+        </app-campo>
+        @if (editando()) {
+          <div class="ancho">
+            <app-campo etiqueta="estado" para="n-estado" [control]="form.controls.estado">
+              <select id="n-estado" formControlName="estado">
+                <option value="en_riesgo">en riesgo</option>
+                <option value="en_proceso">en proceso</option>
+                <option value="acogido">acogido</option>
+                <option value="reintegrado">reintegrado</option>
+              </select>
+            </app-campo>
+          </div>
+        }
+        <div class="ancho">
+          <app-campo etiqueta="observaciones (opcional)" para="n-obs" [control]="form.controls.observaciones">
+            <textarea id="n-obs" formControlName="observaciones"></textarea>
+          </app-campo>
+        </div>
+      </div>
+      <footer>
+        <button type="button" class="btn btn-suave" (click)="modal.set(false)">cancelar</button>
+        <button type="submit" class="btn btn-primario" [disabled]="guardando()">{{ guardando() ? 'guardando...' : 'guardar' }}</button>
+      </footer>
+    </form>
+  </app-modal>
+}

@@ -1,0 +1,19 @@
+:host { display: block; min-height: 100vh; }
+.barra { display: flex; align-items: center; gap: 1.5rem; flex-wrap: wrap; padding: 0.75rem 1.5rem; background: var(--mar-oscuro); color: #fff; }
+.marca { font-family: var(--fuente-titulo); font-size: 1.35rem; font-weight: 700; color: var(--oro); }
+nav { display: flex; gap: 0.25rem; flex-wrap: wrap; flex: 1; }
+nav a { padding: 0.4rem 0.8rem; border-radius: 8px; color: #fff; text-decoration: none; font-weight: 500; }
+nav a:hover { background: rgba(255, 255, 255, 0.12); }
+nav a.activo { background: var(--oro); color: var(--tinta); font-weight: 700; }
+.usuario { display: flex; align-items: center; gap: 0.75rem; font-size: 0.9rem; }
+main { min-height: calc(100vh - 60px); }
+
+.avisos { position: fixed; right: 1rem; bottom: 1rem; z-index: 60; display: grid; gap: 0.5rem; max-width: 360px; }
+.aviso { padding: 0.75rem 1rem; border-radius: 10px; color: #fff; box-shadow: 0 8px 24px rgba(0, 0, 0, 0.25); background: var(--mar); }
+.aviso.exito { background: var(--exito); }
+.aviso.error { background: var(--peligro); }
+
+.conf-fondo { position: fixed; inset: 0; z-index: 70; display: grid; place-items: center; padding: 1rem; background: rgba(29, 43, 54, 0.55); }
+.conf-ventana { width: 100%; max-width: 420px; background: var(--lino); border-radius: 16px; padding: 1.5rem; box-shadow: 0 25px 60px rgba(0, 0, 0, 0.35); }
+.conf-ventana h2 { margin: 0 0 0.5rem; font-size: 1.2rem; }
+.conf-ventana footer { display: flex; justify-content: flex-end; gap: 0.6rem; margin-top: 1.25rem; }

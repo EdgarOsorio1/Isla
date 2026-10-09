@@ -1,1 +1,80 @@
-<p>dashboard works!</p>
+<section class="pagina">
+  <div class="pagina-cabecera">
+    <div>
+      <h1>hola, {{ nombre() }}</h1>
+      <p>{{ subtitulo() }}</p>
+    </div>
+    <a class="btn btn-oro" routerLink="/alertas">ver alertas</a>
+  </div>
+
+  <app-lista-estado [cargando]="cargando()" [error]="error()" />
+
+  @if (datos(); as d) {
+    <div class="kpis">
+      @for (k of kpis(); track k.clave) {
+        <article class="kpi">
+          <span class="numero">{{ k.valor }}</span>
+          <span>{{ k.texto }}</span>
+        </article>
+      }
+    </div>
+
+    @if (d.tipo === 'personal') {
+      <div class="dos">
+        <section class="tarjeta">
+          <h2>alertas por estado</h2>
+          @for (b of barras(d.alertas_por_estado); track b.estado) {
+            <div class="barra">
+              <span>{{ b.etiqueta }}</span>
+              <div class="pista"><div class="relleno" [style.width.%]="b.porcentaje"></div></div>
+              <strong>{{ b.total }}</strong>
+            </div>
+          } @empty {
+            <p class="ayuda">aún no hay alertas registradas.</p>
+          }
+        </section>
+        <section class="tarjeta">
+          <h2>asignaciones por estado</h2>
+          @for (b of barras(d.asignaciones_por_estado); track b.estado) {
+            <div class="barra">
+              <span>{{ b.etiqueta }}</span>
+              <div class="pista"><div class="relleno" [style.width.%]="b.porcentaje"></div></div>
+              <strong>{{ b.total }}</strong>
+            </div>
+          } @empty {
+            <p class="ayuda">aún no hay asignaciones registradas.</p>
+          }
+        </section>
+      </div>
+    }
+
+    <section class="tarjeta" style="margin-top: 1.25rem">
+      <h2>{{ d.tipo === 'personal' ? 'últimas alertas recibidas' : 'tus últimas alertas' }}</h2>
+      @if (d.ultimas_alertas.length) {
+        <div class="tabla-caja" style="border: 0; border-radius: 0">
+          <table>
+            <thead>
+              <tr><th>alerta</th><th>ubicación</th><th>prioridad</th><th>estado</th><th>fecha</th></tr>
+            </thead>
+            <tbody>
+              @for (a of d.ultimas_alertas; track a.id) {
+                <tr>
+                  <td>{{ a.titulo }}</td>
+                  <td>{{ a.ubicacion }}</td>
+                  <td><app-estado [valor]="a.prioridad" /></td>
+                  <td><app-estado [valor]="a.estado" /></td>
+                  <td>{{ a.creado_en | date: 'dd/MM/yyyy' }}</td>
+                </tr>
+              }
+            </tbody>
+          </table>
+        </div>
+      } @else {
+        <div class="estado-caja">
+          <strong>todavía no hay alertas</strong>
+          cuando se reporte una situación aparecerá en este panel.
+        </div>
+      }
+    </section>
+  }
+</section>
